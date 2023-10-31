@@ -1,6 +1,8 @@
-﻿using BusinessLogic.ApiModels.Products;
+﻿using System.Net;
+using BusinessLogic.ApiModels.Products;
 using BusinessLogic.Dtos;
 using BusinessLogic.Interfaces;
+using BusinessLogic.Exceptions;
 using DataAccess;
 using DataAccess.Entities;
 using AutoMapper;
@@ -36,7 +38,7 @@ namespace BusinessLogic.Services
             var model = _context.Products.Find(modelId);
 
             if (model == null)
-                return;
+                throw new HttpException($"Product with Id={modelId} not found", HttpStatusCode.NotFound);
 
             _context.Products.Remove(model);
             _context.SaveChanges();
@@ -52,7 +54,7 @@ namespace BusinessLogic.Services
             var model = _context.Products.Find(modelId);
 
             if (model == null)
-                return null;
+                throw new HttpException($"Product with Id={modelId} not found", HttpStatusCode.NotFound);
 
             return _mapper.Map<ProductDto>(model);
         }

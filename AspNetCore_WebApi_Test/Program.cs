@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using BusinessLogic.Interfaces;
 using BusinessLogic.Services;
 using System.Text.Json.Serialization;
+using AspNetCore_WebAPI_GrandGames.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,11 +18,12 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 builder.Services.AddDbContext<ShopDbContext>(opts => opts.UseSqlServer(connectionString));
 
 builder.Services.AddIdentity<User, IdentityRole>()
-               .AddDefaultTokenProviders()
-               .AddEntityFrameworkStores<ShopDbContext>();
+                .AddEntityFrameworkStores<ShopDbContext>()
+                .AddDefaultTokenProviders();
 
 //Configure services
 builder.Services.AddScoped<IProductsService, ProductsService>();
+builder.Services.AddScoped<IAccountsService, AccountsService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Add services to the container.
@@ -39,6 +41,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 

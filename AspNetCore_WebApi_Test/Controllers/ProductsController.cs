@@ -1,5 +1,6 @@
 ﻿using BusinessLogic.ApiModels.Products;
 using BusinessLogic.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AspNetCore_WebAPI_GrandGames.Controllers
@@ -55,6 +56,7 @@ namespace AspNetCore_WebAPI_GrandGames.Controllers
             return Ok();
         }
 
+        [Authorize]
         [HttpDelete("{modelId}")]
         public IActionResult Delete([FromRoute] int modelId)
         {
